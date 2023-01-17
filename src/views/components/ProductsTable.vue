@@ -1,11 +1,11 @@
 <template>
   <div class="card mb-4">
     <div class="card-header pb-0 mb-2">
-      <div class="row">
-        <div class="col-lg-6">
+      <div class="row flex d-flex">
+        <div class="col-6">
           <h5><b>Products</b></h5>
         </div>
-        <div class="col-lg-6">
+        <div class="col-6 d-flex justify-content-end">
           <div class="col-lg-4">
             <soft-button variant="gradient" color="success" full-width
               >Add Product
@@ -22,22 +22,22 @@
               <th
                 class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
               >
-                Author
+                Product Name
               </th>
               <th
                 class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
               >
-                Function
+                Price
               </th>
               <th
                 class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
               >
-                Status
+                Qty
               </th>
               <th
                 class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
               >
-                Employed
+                Action
               </th>
               <th class="text-secondary opacity-7"></th>
             </tr>
@@ -65,17 +65,9 @@
               </td>
               <td>
                 <p class="text-xs font-weight-bold mb-0">Manager</p>
-                <p class="text-xs text-secondary mb-0">Organization</p>
               </td>
               <td class="align-middle text-center text-sm">
-                <soft-badge color="success" variant="gradient" size="sm"
-                  >Online</soft-badge
-                >
-              </td>
-              <td class="align-middle text-center">
-                <span class="text-secondary text-xs font-weight-bold"
-                  >23/04/18</span
-                >
+                <p class="text-xs font-weight-bold mb-0">100</p>
               </td>
               <td class="align-middle">
                 <a
@@ -96,7 +88,7 @@
 
 <script>
 import SoftAvatar from "@/components/SoftAvatar.vue";
-import SoftBadge from "@/components/SoftBadge.vue";
+// import SoftBadge from "@/components/SoftBadge.vue";
 import SoftButton from "@/components/SoftButton.vue";
 // import SoftPaginationItem from "../../components/SoftPaginationItem.vue";
 import img1 from "../../assets/img/team-2.jpg";
@@ -120,7 +112,7 @@ export default {
   },
   components: {
     SoftAvatar,
-    SoftBadge,
+    // SoftBadge,
     SoftButton,
     // SoftPaginationItem,
   },
