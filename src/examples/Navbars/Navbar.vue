@@ -74,7 +74,10 @@
                 </router-link>
               </li>
               <li class="mb-2">
-                <a class="link dropdown-item border-radius-md" :href="signOut">
+                <a
+                  class="link dropdown-item border-radius-md"
+                  @click.prevent="signOut"
+                >
                   <div class="py-1 d-flex">
                     <div class="my-auto">
                       <img
@@ -265,15 +268,17 @@ export default {
   },
   props: ["minNav", "textWhite"],
   created() {
-    this.minNav;
-    axios
-      .get("http://localhost:8000/api/user", {
-        headers: { Authorization: "Bearer " + this.token },
-      })
-      .then((response) => {
-        console.log(response);
-        this.user = response.data;
-      });
+    if (this.token) {
+      this.minNav;
+      axios
+        .get("http://localhost:8000/api/user", {
+          headers: { Authorization: "Bearer " + this.token },
+        })
+        .then((response) => {
+          console.log(response);
+          this.user = response.data;
+        });
+    }
   },
   methods: {
     ...mapMutations(["navbarMinimize", "toggleConfigurator"]),
@@ -306,16 +311,6 @@ export default {
     currentRouteName() {
       return this.$route.name;
     },
-  },
-  updated() {
-    const navbar = document.getElementById("navbarBlur");
-    window.addEventListener("scroll", () => {
-      if (window.scrollY > 10 && this.$store.state.isNavFixed) {
-        navbar.classList.add("blur");
-        navbar.classList.add("position-sticky");
-        navbar.classList.add("shadow-blur");
-      }
-    });
   },
 };
 </script>

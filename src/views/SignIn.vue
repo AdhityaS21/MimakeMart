@@ -25,6 +25,12 @@
                 </div>
                 <div class="card-body">
                   <form role="form" class="text-start" @submit.prevent="SignIn">
+                    <soft-alert
+                      color="danger"
+                      dismissible
+                      v-if="validation.status"
+                      >Email or Password Incorrect</soft-alert
+                    >
                     <label>Email</label>
                     <soft-input
                       id="email"
@@ -62,6 +68,7 @@
                         variant="gradient"
                         color="success"
                         full-width
+                        type="submit"
                         >Sign in
                       </soft-button>
                     </div>
@@ -142,6 +149,7 @@ export default {
   methods: {
     ...mapMutations(["toggleEveryDisplay", "toggleHideConfig"]),
     SignIn() {
+      this.validation = [];
       if (this.user.email && this.user.password) {
         axios
           .get("http://localhost:8000/sanctum/csrf-cookie")
@@ -162,14 +170,16 @@ export default {
                     return this.$router.push({ name: "Dashboard" });
                   } else {
                     this.loginFailed = true;
+                    this.validation.status = true;
                   }
                 })
                 .catch((error) => {
                   console.log(error);
+                  this.loginFailed = true;
+                  this.validation.status = true;
                 });
           });
       }
-      this.$validation = [];
       if (!this.user.email) {
         this.validation.email = true;
       }

@@ -3,6 +3,7 @@
     class="btn mb-0"
     :class="getClasses(variant, color, size, fullWidth, active)"
     :type="type"
+    @click="clicked"
   >
     <slot />
   </button>
@@ -57,6 +58,9 @@ export default {
       activeValue = active ? `active` : null;
 
       return `${colorValue} ${sizeValue} ${fullWidthValue} ${activeValue}`;
+    },
+    clicked() {
+      this.$emit("clicked");
     },
   },
 };

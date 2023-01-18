@@ -8,6 +8,7 @@ import Rtl from "@/views/Rtl.vue";
 import SignIn from "@/views/SignIn.vue";
 import SignUp from "@/views/SignUp.vue";
 import Products from "@/views/Products.vue";
+import AddProduct from "@/views/AddProduct.vue";
 
 const routes = [
   {
@@ -59,7 +60,19 @@ const routes = [
     path: "/products",
     name: "Products",
     component: Products,
+    children: [
+      {
+        path: "add-product",
+        name: "Add Product",
+        component: AddProduct,
+      },
+    ],
   },
+  // {
+  //   path: "/products/add-product",
+  //   name: "Add Product",
+  //   component: AddProduct,
+  // },
 ];
 
 const router = createRouter({

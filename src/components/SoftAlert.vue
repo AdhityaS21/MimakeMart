@@ -1,6 +1,5 @@
 <template>
   <div
-    v-if="validation"
     class="alert text-white font-weight-bold"
     role="alert"
     :class="getClasses(color, dismissible)"
@@ -37,10 +36,6 @@ export default {
       default: "",
     },
     dismissible: {
-      type: Boolean,
-      default: false,
-    },
-    validation: {
       type: Boolean,
       default: false,
     },
