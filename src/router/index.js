@@ -9,6 +9,8 @@ import SignIn from "@/views/SignIn.vue";
 import SignUp from "@/views/SignUp.vue";
 import Products from "@/views/Products.vue";
 import AddProduct from "@/views/AddProduct.vue";
+import Categories from "@/views/Categories.vue";
+import AddCategory from "@/views/AddCategory.vue";
 
 const routes = [
   {
@@ -68,11 +70,18 @@ const routes = [
       },
     ],
   },
-  // {
-  //   path: "/products/add-product",
-  //   name: "Add Product",
-  //   component: AddProduct,
-  // },
+  {
+    path: "/categories",
+    name: "Categories",
+    component: Categories,
+    children: [
+      {
+        path: "add-category",
+        name: "Add Category",
+        component: AddCategory,
+      },
+    ],
+  },
 ];
 
 const router = createRouter({

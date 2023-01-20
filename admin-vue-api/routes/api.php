@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers\Api\Auth;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -21,3 +22,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/login', [LoginController::class, 'index']);
 Route::get('/logout', [LoginController::class, 'logout']);
+Route::resource('/categories', CategoriesController::class);

@@ -2,18 +2,18 @@
   <div class="py-4 container-fluid">
     <div class="row">
       <div class="col-12">
-        <products-table />
+        <categories-table />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import ProductsTable from "./components/ProductsTable";
+import CategoriesTable from "./components/CategoriesTable.vue";
 
 export default {
   components: {
-    ProductsTable,
+    CategoriesTable,
   },
 };
 </script>

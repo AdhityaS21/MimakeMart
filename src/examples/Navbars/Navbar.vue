@@ -47,7 +47,7 @@
               aria-expanded="false"
               @click="showProfile = !showProfile"
             >
-              <i class="cursor-pointer fa fa-user">{{ user.name }}</i>
+              <i class="cursor-pointer fa fa-user"> {{ user.name }}</i>
             </a>
             <ul
               class="px-2 py-3 dropdown-menu dropdown-menu-end me-sm-n4"
@@ -275,7 +275,6 @@ export default {
           headers: { Authorization: "Bearer " + this.token },
         })
         .then((response) => {
-          console.log(response);
           this.user = response.data;
         });
     }
@@ -292,8 +291,7 @@ export default {
     signOut() {
       axios
         .get(`http://localhost:8000/api/logout`)
-        .then((res) => {
-          console.log(res);
+        .then(() => {
           localStorage.removeItem("loggedIn");
           localStorage.removeItem("token"), (this.loggedIn = false);
           return this.$router.push({ name: "Sign In" });

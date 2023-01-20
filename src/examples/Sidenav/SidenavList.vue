@@ -59,6 +59,13 @@
         </sidenav-collapse>
       </li>
       <li class="nav-item">
+        <sidenav-collapse navText="Categories" :to="{ name: 'Categories' }">
+          <template #icon>
+            <customer-support />
+          </template>
+        </sidenav-collapse>
+      </li>
+      <li class="nav-item">
         <sidenav-collapse navText="Sign In" :to="{ name: 'Sign In' }">
           <template #icon>
             <document />
