@@ -1,5 +1,5 @@
 <template>
-  <div v-if="this.$route.name === 'Categories'">
+  <div>
     <div class="card mb-4">
       <div class="card-header pb-0 mb-2">
         <div class="row flex d-flex">
@@ -23,21 +23,20 @@
             <thead>
               <tr>
                 <th
-                  class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                  class="text-uppercase text-secondary text-xxs font-weight-bolder"
                 >
                   No
                 </th>
                 <th
-                  class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
+                  class="text-uppercase text-secondary text-xxs font-weight-bolder"
                 >
                   Category
                 </th>
                 <th
-                  class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                  class="text-uppercase text-secondary text-xxs font-weight-bolder"
                 >
                   Action
                 </th>
-                <th class="text-secondary opacity-7"></th>
               </tr>
             </thead>
             <tbody>
@@ -48,25 +47,34 @@
               </tr>
               <tr v-for="data in categories" :key="data.id">
                 <td>
-                  <div class="d-flex px-2 py-1">
+                  <div class="d-flex px-3 py-1">
                     <p class="align-middle text-center text-sm">
                       {{ data.id }}
                     </p>
                   </div>
                 </td>
                 <td>
-                  <p class="text-xs font-weight-bold mb-0">
-                    {{ data.Category }}
-                  </p>
+                  <div class="d-flex px-3 py-1">
+                    <p class="text-xs font-weight-bold mb-0">
+                      {{ data.Category }}
+                    </p>
+                  </div>
                 </td>
-                <td class="align-middle text-center text-sm">
-                  <a
-                    href="javascript:;"
-                    class="text-secondary font-weight-bold text-xs"
-                    data-toggle="tooltip"
-                    data-original-title="Edit user"
-                    >Edit</a
-                  >
+                <td>
+                  <div class="d-flex px-3 py-1">
+                    <router-link
+                      :to="{ name: 'Edit Category', params: { id: data.id } }"
+                    >
+                      <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                    </router-link>
+                    <a
+                      class="link ml-4"
+                      href="javascript:;"
+                      @click.prevent="destroy(data.id)"
+                    >
+                      <i class="fa fa-trash" aria-hidden="true"></i>
+                    </a>
+                  </div>
                 </td>
               </tr>
             </tbody>
@@ -75,7 +83,6 @@
       </div>
     </div>
   </div>
-  <router-view></router-view>
 </template>
 
 <script>
@@ -102,8 +109,22 @@ export default {
         });
     });
 
+    function destroy(id) {
+      if (confirm("Do you really want to delete?")) {
+        axios
+          .delete(`http://localhost:8000/api/categories/${id}`)
+          .then(() => {
+            categories.value.splice(categories.value.indexOf(id), 1);
+          })
+          .catch((error) => {
+            console.log(error.response.data);
+          });
+      }
+    }
+
     return {
       categories,
+      destroy,
     };
   },
 

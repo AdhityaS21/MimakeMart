@@ -80,6 +80,11 @@ const routes = [
         name: "Add Category",
         component: AddCategory,
       },
+      {
+        path: ":id",
+        name: "Edit Category",
+        component: AddCategory,
+      },
     ],
   },
 ];

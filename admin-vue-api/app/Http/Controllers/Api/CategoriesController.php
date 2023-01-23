@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use Illuminate\Support\Facades\Validator;
@@ -9,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 class CategoriesController extends Controller
 {
     public function index(){
-        $categories = Category::latest()->get();;
+        $categories = Category::get();
 
         $response = [
             'success' => true,
@@ -45,5 +46,33 @@ class CategoriesController extends Controller
             'success' => false,
             'message' => 'Category Failed to Save',
         ], 409);
+    }
+
+    public function show($id){
+        $category = Category::findOrFail($id);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Detail Data Category',
+            'data' => $category,
+        ], 200);
+    }
+
+    public function destroy($id){
+        $category = Category::findOrFail($id);
+
+        if($category) {
+            $category->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Category Deleted',
+            ], 200);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Category Not Found',
+        ], 404);
     }
 }

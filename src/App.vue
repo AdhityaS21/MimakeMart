@@ -18,7 +18,7 @@
       :minNav="navbarMinimize"
       v-if="this.$store.state.showNavbar"
     />
-    <router-view />
+    <router-view></router-view>
     <app-footer v-show="this.$store.state.showFooter" />
     <!-- <configurator
       :toggle="toggleConfigurator"
