@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import { reactive, onMounted } from "vue";
+import { reactive } from "vue";
 import axios from "axios";
 import { useRouter, useRoute } from "vue-router";
 import SoftInput from "../components/SoftInput.vue";
@@ -57,27 +57,53 @@ export default {
     SoftButton,
     SoftAlert,
   },
+
   setup() {
-    const category = reactive({
-      category_name: "",
-      id: 0,
-      validation: false,
-    });
-    const router = useRouter();
     const route = useRoute();
 
-    onMounted(() => {
+    if (!route.params.id) {
+      const category = reactive({
+        category_name: "",
+        id: 0,
+        validation: false,
+      });
+
+      return {
+        category,
+        store,
+      };
+    } else {
+      const category = reactive({
+        category_name: "",
+        id: 1,
+        validation: false,
+      });
+
       axios
         .get(`http://localhost:8000/api/categories/${route.params.id}`)
         .then((response) => {
           category.category_name = response.data.data.Category;
           category.id = response.data.data.id;
+          console.log(response);
         })
         .catch((error) => {
           console.log(error.response.data);
         });
-    });
+
+      return {
+        category,
+        store,
+      };
+    }
+
     function store() {
+      const category = reactive({
+        category_name: "",
+        id: 0,
+        validation: false,
+      });
+      const router = useRouter();
+
       if (category.category_name != "") {
         let name = category.category_name;
 
@@ -94,14 +120,6 @@ export default {
         category.validation = true;
       }
     }
-    return {
-      category,
-      router,
-      store,
-    };
-  },
-  data() {
-    return {};
   },
 };
 </script>
