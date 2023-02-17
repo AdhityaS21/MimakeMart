@@ -49,7 +49,7 @@
                 <td>
                   <div class="d-flex px-3 py-1">
                     <p class="align-middle text-center text-sm">
-                      {{ data.id }}
+                      {{ this.nomer++ }}
                     </p>
                   </div>
                 </td>
@@ -96,13 +96,13 @@ import SoftButton from "@/components/SoftButton.vue";
 export default {
   setup() {
     let categories = ref([]);
+    let nomer = 1;
 
     onMounted(() => {
       axios
         .get("http://localhost:8000/api/categories")
         .then((response) => {
           categories.value = response.data.data;
-          console.log(categories);
         })
         .catch((error) => {
           console.log(error.response.data);
@@ -124,6 +124,7 @@ export default {
 
     return {
       categories,
+      nomer,
       destroy,
     };
   },

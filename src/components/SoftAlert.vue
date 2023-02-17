@@ -2,6 +2,7 @@
   <div
     class="alert text-white font-weight-bold"
     role="alert"
+    v-if="isValid"
     :class="getClasses(color, dismissible)"
   >
     <span class="alert-icon">
@@ -36,6 +37,10 @@ export default {
       default: "",
     },
     dismissible: {
+      type: Boolean,
+      default: false,
+    },
+    isValid: {
       type: Boolean,
       default: false,
     },

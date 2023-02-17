@@ -38,11 +38,12 @@
                       placeholder="Email"
                       name="email"
                       v-model="user.email"
+                      isRequired
                     />
                     <soft-alert
                       color="danger"
                       dismissible
-                      v-if="validation.email"
+                      v-bind:isValid="validation.email"
                       >Email Field Cannot Empty</soft-alert
                     >
                     <label>Password</label>
@@ -52,11 +53,12 @@
                       placeholder="Password"
                       name="password"
                       v-model="user.password"
+                      isRequired
                     />
                     <soft-alert
                       color="danger"
                       dismissible
-                      v-if="validation.password"
+                      v-bind:isValid="validation.password"
                       >Password Field Cannot Empty</soft-alert
                     >
                     <soft-switch id="rememberMe" name="rememberMe" checked>
@@ -149,7 +151,6 @@ export default {
   methods: {
     ...mapMutations(["toggleEveryDisplay", "toggleHideConfig"]),
     SignIn() {
-      this.validation = [];
       if (this.user.email && this.user.password) {
         axios
           .get("http://localhost:8000/sanctum/csrf-cookie")
@@ -180,6 +181,7 @@ export default {
                 });
           });
       }
+
       if (!this.user.email) {
         this.validation.email = true;
       }

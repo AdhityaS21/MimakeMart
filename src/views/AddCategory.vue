@@ -29,9 +29,14 @@
                     >Category Field Cannot Empty</soft-alert
                   >
                 </div>
-                <div class="mt-4">
+                <div class="mt-4" v-if="category.id == 0">
                   <soft-button variant="gradient" color="success" full-width
-                    >Add Product</soft-button
+                    >Add Category</soft-button
+                  >
+                </div>
+                <div class="mt-4" v-if="category.id > 0">
+                  <soft-button variant="gradient" color="success" full-width
+                    >Update Category</soft-button
                   >
                 </div>
               </form>
@@ -44,7 +49,7 @@
 </template>
 
 <script>
-import { reactive } from "vue";
+import { reactive, onMounted } from "vue";
 import axios from "axios";
 import { useRouter, useRoute } from "vue-router";
 import SoftInput from "../components/SoftInput.vue";
@@ -60,66 +65,63 @@ export default {
 
   setup() {
     const route = useRoute();
+    const router = useRouter();
+    const category = reactive({
+      category_name: "",
+      id: route.params.id ? route.params.id : "",
+      validation: false,
+    });
 
-    if (!route.params.id) {
-      const category = reactive({
-        category_name: "",
-        id: 0,
-        validation: false,
+    if (route.params.id) {
+      onMounted(() => {
+        axios
+          .get(`http://localhost:8000/api/categories/${route.params.id}`)
+          .then((response) => {
+            category.category_name = response.data.data.Category;
+            category.id = response.data.data.id;
+          })
+          .catch((error) => {
+            console.log(error.response.data);
+          });
       });
-
-      return {
-        category,
-        store,
-      };
-    } else {
-      const category = reactive({
-        category_name: "",
-        id: 1,
-        validation: false,
-      });
-
-      axios
-        .get(`http://localhost:8000/api/categories/${route.params.id}`)
-        .then((response) => {
-          category.category_name = response.data.data.Category;
-          category.id = response.data.data.id;
-          console.log(response);
-        })
-        .catch((error) => {
-          console.log(error.response.data);
-        });
-
-      return {
-        category,
-        store,
-      };
     }
 
     function store() {
-      const category = reactive({
-        category_name: "",
-        id: 0,
-        validation: false,
-      });
-      const router = useRouter();
+      let name = category.category_name;
 
       if (category.category_name != "") {
-        let name = category.category_name;
-
-        axios
-          .post("http://localhost:8000/api/categories", { category: name })
-          .then((response) => {
-            if (response.data.success) {
-              return router.push({ name: "Categories" });
-            } else {
-              return;
-            }
-          });
+        if (!route.params.id) {
+          axios
+            .post("http://localhost:8000/api/categories", { category: name })
+            .then((response) => {
+              if (response.data.success) {
+                return router.push({ name: "Categories" });
+              } else {
+                return;
+              }
+            });
+        } else {
+          axios
+            .put(`http://localhost:8000/api/categories/${route.params.id}`, {
+              category: name,
+            })
+            .then((response) => {
+              if (response.data.success) {
+                return router.push({ name: "Categories" });
+              } else {
+                return;
+              }
+            });
+        }
       } else {
         category.validation = true;
       }
     }
+    return {
+      category,
+      store,
+    };
   },
+  methods: {},
 };
 </script>

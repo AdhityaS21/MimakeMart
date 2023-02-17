@@ -75,4 +75,33 @@ class CategoriesController extends Controller
             'message' => 'Category Not Found',
         ], 404);
     }
+
+    public function update(Request $request, Category $category){
+        $validator = Validator::make($request->all(), [
+            'category'   => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        $cate = Category::findOrFail($category->id);
+
+        if($cate) {
+            $cate->update([
+                'Category'     => $request->category,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Category Updated',
+                'data'    => $cate 
+            ], 200);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Category Not Found',
+        ], 404);
+    }
 }
