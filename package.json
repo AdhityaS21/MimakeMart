@@ -15,7 +15,6 @@
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
     "@fortawesome/vue-fontawesome": "^3.0.0-5",
     "@popperjs/core": "2.10.2",
-    "@vuesimple/vs-toast": "^1.4.13",
     "axios": "^1.2.2",
     "bootstrap": "5.1.3",
     "chart.js": "3.6.0",
@@ -27,6 +26,7 @@
     "vue": "3.2.0",
     "vue-flatpickr-component": "9.0.5",
     "vue-router": "^4.0.0-0",
+    "vue3-toastify": "^0.1.0",
     "vuex": "^4.0.2"
   },
   "devDependencies": {

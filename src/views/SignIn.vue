@@ -71,9 +71,12 @@
                         color="success"
                         full-width
                         type="submit"
-                        >
-                        <div v-if="!isLoading">Sign in</div>
-                        <div v-if="isLoading"><progress-spinner size="20px" strokeWidth="3" /></div>
+                        :disabled="isLoading"
+                      >
+                        <div v-if="!isLoading">Sign In</div>
+                        <div v-else>
+                          <progress-spinner size="20px" strokeWidth="3" />
+                        </div>
                       </soft-button>
                     </div>
                   </form>
@@ -113,6 +116,7 @@
 </template>
 
 <script>
+import { ref } from "vue";
 import Navbar from "@/examples/PageLayout/Navbar.vue";
 import SoftInput from "@/components/SoftInput.vue";
 import SoftSwitch from "@/components/SoftSwitch.vue";
@@ -122,7 +126,8 @@ const body = document.getElementsByTagName("body")[0];
 import { mapMutations } from "vuex";
 import axios from "axios";
 import ProgressSpinner from "lightvue/progress-spinner";
-import VsToast from "@vuesimple/vs-toast";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 export default {
   name: "SignIn",
@@ -139,9 +144,8 @@ export default {
       user: [],
       loggedIn: localStorage.getItem("loggedIn"),
       token: localStorage.getItem("token"),
-      loginFailed: null,
       validation: [],
-      isLoading: false,
+      isLoading: ref(false),
     };
   },
   created() {
@@ -175,20 +179,17 @@ export default {
                       localStorage.setItem("token", res.data.token),
                       (this.loggedIn = true);
 
+                    this.isLoading = false;
                     return this.$router.push({ name: "Dashboard" });
-                  } else {
-                    this.loginFailed = true;
-                    this.validation.status = true;
                   }
                 })
                 .catch((error) => {
-                  console.log(error.response.data.message[0]);
-                  this.showError("Error", error.response.data.message[0], "top-right");
-                  this.loginFailed = true;
-                  this.validation.status = true;
+                  this.showError(error.response.data.message[0]);
+                  this.isLoading = !this.isLoading;
+                  this.user.email = "";
+                  this.user.password = "";
                 });
           });
-        this.isLoading = false;
       }
 
       if (!this.user.email) {
@@ -199,13 +200,10 @@ export default {
         this.validation.password = true;
       }
     },
-    showError(title, message, position) {
-      VsToast.show({
-        title: title,
-        message: message,
-        variant: "success",
-        type: "alert",
-        position,
+
+    showError(message) {
+      toast.error(message, {
+        autoClose: 3000,
       });
     },
   },
