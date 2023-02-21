@@ -71,7 +71,9 @@
                         color="success"
                         full-width
                         type="submit"
-                        >Sign in
+                        >
+                        <div v-if="!isLoading">Sign in</div>
+                        <div v-if="isLoading"><progress-spinner size="20px" strokeWidth="3" /></div>
                       </soft-button>
                     </div>
                   </form>
@@ -119,6 +121,8 @@ import SoftAlert from "@/components/SoftAlert.vue";
 const body = document.getElementsByTagName("body")[0];
 import { mapMutations } from "vuex";
 import axios from "axios";
+import ProgressSpinner from "lightvue/progress-spinner";
+import VsToast from "@vuesimple/vs-toast";
 
 export default {
   name: "SignIn",
@@ -128,6 +132,7 @@ export default {
     SoftSwitch,
     SoftButton,
     SoftAlert,
+    ProgressSpinner,
   },
   data() {
     return {
@@ -136,6 +141,7 @@ export default {
       token: localStorage.getItem("token"),
       loginFailed: null,
       validation: [],
+      isLoading: false,
     };
   },
   created() {
@@ -152,6 +158,7 @@ export default {
     ...mapMutations(["toggleEveryDisplay", "toggleHideConfig"]),
     SignIn() {
       if (this.user.email && this.user.password) {
+        this.isLoading = true;
         axios
           .get("http://localhost:8000/sanctum/csrf-cookie")
           .then((response) => {
@@ -175,11 +182,13 @@ export default {
                   }
                 })
                 .catch((error) => {
-                  console.log(error);
+                  console.log(error.response.data.message[0]);
+                  this.showError("Error", error.response.data.message[0], "top-right");
                   this.loginFailed = true;
                   this.validation.status = true;
                 });
           });
+        this.isLoading = false;
       }
 
       if (!this.user.email) {
@@ -189,6 +198,15 @@ export default {
       if (!this.user.password) {
         this.validation.password = true;
       }
+    },
+    showError(title, message, position) {
+      VsToast.show({
+        title: title,
+        message: message,
+        variant: "success",
+        type: "alert",
+        position,
+      });
     },
   },
   mounted() {

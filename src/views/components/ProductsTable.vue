@@ -51,7 +51,12 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
+              <tr v-if="this.products.length == 0">
+                  <td colspan="3">
+                    <p class="align-middle text-center text-sm">No Data</p>
+                  </td>
+                </tr>
+              <tr v-for="data in products" :key="data.id">
                 <td>
                   <div class="d-flex px-2 py-1">
                     <div>
@@ -64,30 +69,34 @@
                       />
                     </div>
                     <div class="d-flex flex-column justify-content-center">
-                      <h6 class="mb-0 text-sm">John Michael</h6>
-                      <p class="text-xs text-secondary mb-0">
-                        john@creative-tim.com
-                      </p>
+                      <p class="text-xs font-weight-bold mb-0">{{ data.Product_Name }}</p>
                     </div>
                   </div>
                 </td>
                 <td>
-                  <p class="text-xs font-weight-bold mb-0">Manager</p>
+                  <p class="text-xs font-weight-bold mb-0">{{ data.Pricesell }}</p>
                 </td>
                 <td class="align-middle text-center text-sm">
-                  <p class="text-xs font-weight-bold mb-0">100</p>
+                  <p class="text-xs font-weight-bold mb-0">{{ data.Qty }}</p>
                 </td>
                 <td>
-                  <p class="text-xs font-weight-bold mb-0">100</p>
+                  <p class="text-xs font-weight-bold mb-0">{{ data.categories[0].Category }}</p>
                 </td>
                 <td class="align-middle text-center text-sm">
-                  <a
-                    href="javascript:;"
-                    class="text-secondary font-weight-bold text-xs"
-                    data-toggle="tooltip"
-                    data-original-title="Edit user"
-                    >Edit</a
-                  >
+                  <div class="d-flex px-3 py-1">
+                    <router-link
+                      :to="{ name: 'Edit Product', params: { id: data.id } }"
+                    >
+                      <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                    </router-link>
+                    <a
+                      class="link ml-4"
+                      href="javascript:;"
+                      @click.prevent="destroy(data.id)"
+                    >
+                      <i class="fa fa-trash" aria-hidden="true"></i>
+                    </a>
+                  </div>
                 </td>
               </tr>
             </tbody>
@@ -100,6 +109,8 @@
 </template>
 
 <script>
+import axios from "axios";
+import { onMounted, ref } from "vue";
 import SoftAvatar from "@/components/SoftAvatar.vue";
 // import SoftBadge from "@/components/SoftBadge.vue";
 import SoftButton from "@/components/SoftButton.vue";
@@ -122,11 +133,45 @@ export default {
       img6,
     };
   },
+
   components: {
     SoftAvatar,
     // SoftBadge,
     SoftButton,
     // SoftPaginationItem,
+  },
+
+  setup() {
+    let products = ref([]);
+
+    onMounted(() => {
+      axios
+        .get("http://localhost:8000/api/products")
+        .then((response) => {
+          products.value = response.data.data;
+        })
+        .catch((error) => {
+          console.log(error.response.data);
+        });
+    });
+
+    function destroy(id) {
+      if (confirm("Do you really want to delete?")) {
+        axios
+          .delete(`http://localhost:8000/api/products/${id}`)
+          .then(() => {
+            products.value.splice(products.value.indexOf(id), 1);
+          })
+          .catch((error) => {
+            console.log(error.response.data);
+          });
+      }
+    }
+
+    return {
+      products,
+      destroy,
+    };
   },
 };
 </script>

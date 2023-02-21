@@ -88,7 +88,6 @@
 <script>
 import axios from "axios";
 import { onMounted, ref } from "vue";
-// import SoftAvatar from "@/components/SoftAvatar.vue";
 // import SoftBadge from "@/components/SoftBadge.vue";
 import SoftButton from "@/components/SoftButton.vue";
 // import SoftPaginationItem from "../../components/SoftPaginationItem.vue";
@@ -130,7 +129,6 @@ export default {
   },
 
   components: {
-    // SoftAvatar,
     // SoftBadge,
     SoftButton,
     // SoftPaginationItem,

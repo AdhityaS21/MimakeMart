@@ -89,7 +89,7 @@ export default {
     function store() {
       let name = category.category_name;
 
-      if (category.category_name != "") {
+      if (name != "") {
         if (!route.params.id) {
           axios
             .post("http://localhost:8000/api/categories", { category: name })

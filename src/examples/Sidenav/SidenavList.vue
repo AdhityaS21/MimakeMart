@@ -66,14 +66,14 @@
         </sidenav-collapse>
       </li>
       <li class="nav-item">
-        <sidenav-collapse navText="Sign In" :to="{ name: 'Sign In' }">
+        <sidenav-collapse navText="Users" :to="{ name: 'Users' }">
           <template #icon>
             <document />
           </template>
         </sidenav-collapse>
       </li>
       <li class="nav-item">
-        <sidenav-collapse navText="Sign Up" :to="{ name: 'Sign Up' }">
+        <sidenav-collapse navText="Roles" :to="{ name: 'Roles' }">
           <template #icon>
             <spaceship />
           </template>

@@ -136,14 +136,23 @@
             </div>
           </div>
           <div class="card-body">
-            <form role="form">
+            <form role="form" @submit.prevent="create">
               <div class="mb-3">
                 <soft-input
                   id="name"
                   type="text"
                   placeholder="Name"
                   aria-label="Name"
+                  name="name"
+                  v-model="user.name"
+                  isRequired
                 />
+                <soft-alert
+                      color="danger"
+                      dismissible
+                      v-bind:isValid="validation.name"
+                      >Name Field Cannot Empty</soft-alert
+                    >
               </div>
               <div class="mb-3">
                 <soft-input
@@ -151,7 +160,16 @@
                   type="email"
                   placeholder="Email"
                   aria-label="Email"
+                  name="email"
+                  v-model="user.email"
+                  isRequired
                 />
+                <soft-alert
+                      color="danger"
+                      dismissible
+                      v-bind:isValid="validation.email"
+                      >Email Field Cannot Empty</soft-alert
+                    >
               </div>
               <div class="mb-3">
                 <soft-input
@@ -159,7 +177,16 @@
                   type="password"
                   placeholder="Password"
                   aria-label="Password"
+                  name="password"
+                  v-model="user.password"
+                  isRequired
                 />
+                <soft-alert
+                      color="danger"
+                      dismissible
+                      v-bind:isValid="validation.password"
+                      >Password Field Cannot Empty</soft-alert
+                    >
               </div>
               <soft-checkbox
                 id="flexCheckDefault"
@@ -206,6 +233,8 @@ import AppFooter from "@/examples/PageLayout/Footer.vue";
 import SoftInput from "@/components/SoftInput.vue";
 import SoftCheckbox from "@/components/SoftCheckbox.vue";
 import SoftButton from "@/components/SoftButton.vue";
+import SoftAlert from "../components/SoftAlert.vue";
+import axios from "axios";
 
 import { mapMutations } from "vuex";
 
@@ -217,6 +246,13 @@ export default {
     SoftInput,
     SoftCheckbox,
     SoftButton,
+    SoftAlert
+  },
+  data() {
+    return {
+      user: [],
+      validation: [],
+    };
   },
   created() {
     this.toggleEveryDisplay();
@@ -228,6 +264,38 @@ export default {
   },
   methods: {
     ...mapMutations(["toggleEveryDisplay", "toggleHideConfig"]),
+    create(){
+      if (this.user.name && this.user.email && this.user.password) {
+        axios
+          .post("http://localhost:8000/api/register", {name: this.user.name, email: this.user.email, password: this.user.password})
+          .then((res) => {
+            console.log(res);
+            if (res.data.success) {
+              localStorage.setItem("loggedIn", true),
+              localStorage.setItem("token", res.data.token),
+              (this.loggedIn = true);
+              return this.$router.push({ name: "Dashboard" });
+            } else {
+              this.loginFailed = true;
+              this.validation.status = true;
+            }
+          }).catch((e) => {
+            console.log(e)
+          });
+      }
+
+      if (!this.user.name) {
+        this.validation.name = true;
+      }
+
+      if (!this.user.email) {
+        this.validation.email = true;
+      }
+
+      if (!this.user.password) {
+        this.validation.password = true;
+      }
+    }
   },
 };
 </script>

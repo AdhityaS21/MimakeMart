@@ -11,6 +11,10 @@ import Products from "@/views/Products.vue";
 import AddProduct from "@/views/AddProduct.vue";
 import Categories from "@/views/Categories.vue";
 import AddCategory from "@/views/AddCategory.vue";
+import Users from "@/views/UsersPage/Users.vue";
+import Roles from "@/views/RolesPage/Roles.vue";
+import AddRole from "@/views/RolesPage/AddRole.vue";
+import AddUser from "@/views/UsersPage/AddUser.vue";
 
 const routes = [
   {
@@ -68,6 +72,11 @@ const routes = [
         name: "Add Product",
         component: AddProduct,
       },
+      {
+        path: ":id",
+        name: "Edit Product",
+        component: AddProduct,
+      },
     ],
   },
   {
@@ -87,6 +96,40 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/users",
+    name: "Users",
+    component: Users,
+    children: [
+      {
+        path: "add-users",
+        name: "Add Users",
+        component: AddUser,
+      },
+      {
+        path: ":id",
+        name: "Edit Users",
+        component: AddUser,
+      }
+    ],
+  },
+  {
+    path: "/roles",
+    name: "Roles",
+    component: Roles,
+    children: [
+      {
+        path: "add-roles",
+        name: "Add Roles",
+        component: AddRole,
+      },
+      {
+        path: ":id",
+        name: "Edit Roles",
+        component: AddRole,
+      }
+    ],
+  }
 ];
 
 const router = createRouter({
