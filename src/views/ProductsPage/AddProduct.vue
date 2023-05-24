@@ -6,10 +6,10 @@
           <div class="card-header pb-0 mb-2">
             <div class="row flex d-flex">
               <div class="col-6" v-if="product.id == 0">
-                <h5><b>Add Category</b></h5>
+                <h5><b>Add Product</b></h5>
               </div>
               <div class="col-6" v-if="product.id > 0">
-                <h5><b>Edit Category</b></h5>
+                <h5><b>Edit Product</b></h5>
               </div>
             </div>
           </div>
@@ -17,6 +17,17 @@
             <div class="row flex d-flex mx-4 mb-2">
               <form @submit.prevent="store">
                 <div class="px-2">
+                  <label>Product Image</label>
+                  <soft-input
+                    id="product-name"
+                    type="file"
+                    placeholder="Product Image"
+                    name="product_image"
+                    v-on:change="onChange"
+                  />
+                  <soft-alert color="danger" v-if="product.validation"
+                    >Product Image Field Cannot Empty</soft-alert
+                  >
                   <label>Product Name</label>
                   <soft-input
                     id="product-name"
@@ -64,7 +75,7 @@
                       :key="data.id"
                       :value="data.id"
                     >
-                      {{ data.id }}. {{ data.Category }}
+                      {{ data.Category }}
                     </option>
                   </select>
                   <soft-alert color="danger" v-if="product.validation"
@@ -92,11 +103,12 @@
 
 <script>
 import { reactive, onMounted } from "vue";
-import SoftInput from "../components/SoftInput.vue";
-import SoftButton from "../components/SoftButton.vue";
-import SoftAlert from "../components/SoftAlert.vue";
+import SoftInput from "../../components/SoftInput.vue";
+import SoftButton from "../../components/SoftButton.vue";
+import SoftAlert from "../../components/SoftAlert.vue";
 import axios from "axios";
 import { useRouter, useRoute } from "vue-router";
+import useToast from "../../composable/useToast";
 
 export default {
   components: {
@@ -105,13 +117,15 @@ export default {
     SoftAlert
   },
   setup(){
+    const { toggleToast } = useToast();
     const route = useRoute();
     const router = useRouter();
     const product = reactive({
       id: route.params.id ? route.params.id : "",
+      product_image: "",
       product_name: "",
       pricesell: "",
-      qty: 0,
+      qty: "",
       category_id: "",
       validation: false,
     });
@@ -134,22 +148,29 @@ export default {
     }
 
     function store() {
+      let image = product.product_image;
       let name = product.product_name;
       let pricesell = product.pricesell;
       let qty = product.qty;
       let category_id = product.category_id;
+      const config = {
+        headers: { 'content-type': 'multipart/form-data' }
+      }
 
-      if (name != "" || pricesell != "" || qty != "" || category_id != "") {
+      if (image != "" || name != "" || pricesell != "" || qty != "" || category_id != "") {
         if (!route.params.id) {
           axios
             .post("http://localhost:8000/api/products", {
+              product_image: image,
               product_name: name,
               pricesell: pricesell,
               qty: qty,
               category_id: category_id,
-            })
+            }, config)
             .then((response) => {
               if (response.data.success) {
+                console.log(response.data.data)
+                toggleToast(true, response.data.message);
                 return router.push({ name: "Products" });
               } else {
                 return;
@@ -158,13 +179,15 @@ export default {
         } else {
           axios
             .put(`http://localhost:8000/api/products/${route.params.id}`, {
+              product_image: image,
               product_name: name,
               pricesell: pricesell,
               qty: qty,
               category_id: category_id,
-            })
+            }, config)
             .then((response) => {
               if (response.data.success) {
+                toggleToast(true, response.data.message);
                 return router.push({ name: "Products" });
               } else {
                 return;
@@ -176,9 +199,16 @@ export default {
       }
     }
 
+    function onChange(e){
+      console.log(e.target.files[0]);
+      product.product_image = e.target.files[0];
+      console.log(product.product_image);
+    }
+
     return {
       product,
       store,
+      onChange
     };
   },
 

@@ -1,6 +1,6 @@
 import { createStore } from "vuex";
 import bootstrap from "bootstrap/dist/js/bootstrap.min.js";
-import axios from "axios";
+// import axios from "axios";
 
 export default createStore({
   data() {
@@ -28,7 +28,7 @@ export default createStore({
     bootstrap,
     loggedIn: localStorage.getItem("loggedIn"),
     token: localStorage.getItem("token"),
-    user: [],
+    user: "",
   },
   mutations: {
     toggleConfigurator(state) {
@@ -77,14 +77,14 @@ export default createStore({
     },
   },
   getters: {},
-  created() {
-    axios
-      .get("http://localhost:8000/api/user", {
-        headers: { Authorization: "Bearer " + this.token },
-      })
-      .then((response) => {
-        console.log(response);
-        this.user = response.data;
-      });
-  },
+  // created() {
+  //   axios
+  //     .get("http://localhost:8000/api/user", {
+  //       headers: { Authorization: "Bearer " + this.token },
+  //     })
+  //     .then((response) => {
+  //       console.log(response);
+  //       this.user = response.data;
+  //     });
+  // },
 });

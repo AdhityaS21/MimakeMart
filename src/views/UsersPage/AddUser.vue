@@ -97,6 +97,7 @@
   import SoftAlert from "../../components/SoftAlert.vue";
   import axios from "axios";
   import { useRouter, useRoute } from "vue-router";
+  import useToast from "../../composable/useToast";
   
   export default {
     components: {
@@ -105,6 +106,7 @@
       SoftAlert
     },
     setup(){
+      const { toggleToast } = useToast();
       const route = useRoute();
       const router = useRouter();
       const user = reactive({
@@ -150,6 +152,7 @@
               })
               .then((response) => {
                 if (response.data.success) {
+                  toggleToast(true, response.data.message);
                   return router.push({ name: "Users" });
                 } else {
                   return;
@@ -165,6 +168,7 @@
               })
               .then((response) => {
                 if (response.data.success) {
+                  toggleToast(true, response.data.message);
                   return router.push({ name: "Users" });
                 } else {
                   return;

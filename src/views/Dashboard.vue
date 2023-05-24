@@ -352,7 +352,6 @@ export default {
     TimelineItem,
   },
   mounted() {
-    console.log(this.loggedIn);
     if (!this.loggedIn) {
       return this.$router.push({ name: "Sign In" });
     }

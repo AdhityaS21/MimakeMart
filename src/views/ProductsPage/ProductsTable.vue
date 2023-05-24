@@ -61,11 +61,11 @@
                   <div class="d-flex px-2 py-1">
                     <div>
                       <soft-avatar
-                        :img="img1"
-                        size="sm"
+                        :img="data.Product_image"
+                        size="lg"
                         border-radius="lg"
                         class="me-3"
-                        alt="user1"
+                        alt="prod"
                       />
                     </div>
                     <div class="d-flex flex-column justify-content-center">
@@ -92,10 +92,20 @@
                     <a
                       class="link ml-4"
                       href="javascript:;"
-                      @click.prevent="destroy(data.id)"
+                      @click.prevent="openConfirm"
                     >
                       <i class="fa fa-trash" aria-hidden="true"></i>
                     </a>
+                    <lv-dialog header="Confirmation" v-model="displayConfirmation" :style="{ width: '350px' }" :modal="true">
+                        <div class="confirmation-content">
+                          <i class="light-icon-alert-triangle p-mr-3" style="font-size: 2rem;" />
+                          <span>Are you sure want to proceed?</span>
+                        </div>
+                        <template #footer>
+                          <lv-button label="No" icon="light-icon-x" @click="closeConfirmation" class="--text-button" />
+                          <lv-button label="Yes" icon="light-icon-check" @click="closeConfirmation" class="--text-button" autofocus />
+                        </template>
+                      </lv-dialog>
                   </div>
                 </td>
               </tr>
@@ -115,22 +125,15 @@ import SoftAvatar from "@/components/SoftAvatar.vue";
 // import SoftBadge from "@/components/SoftBadge.vue";
 import SoftButton from "@/components/SoftButton.vue";
 // import SoftPaginationItem from "../../components/SoftPaginationItem.vue";
-import img1 from "../../assets/img/team-2.jpg";
-import img2 from "../../assets/img/team-3.jpg";
-import img3 from "../../assets/img/team-4.jpg";
-import img4 from "../../assets/img/team-3.jpg";
-import img5 from "../../assets/img/team-2.jpg";
-import img6 from "../../assets/img/team-4.jpg";
+import useToast from "../../composable/useToast";
+import { toast } from "vue3-toastify";
+import LvDialog from "lightvue/dialog";
+import LvButton from "lightvue/button";
 
 export default {
   data() {
     return {
-      img1,
-      img2,
-      img3,
-      img4,
-      img5,
-      img6,
+      displayConfirmation: false,
     };
   },
 
@@ -139,9 +142,12 @@ export default {
     // SoftBadge,
     SoftButton,
     // SoftPaginationItem,
+    LvButton,
+    LvDialog
   },
 
   setup() {
+    const { isShow, message } = useToast();
     let products = ref([]);
 
     onMounted(() => {
@@ -149,6 +155,7 @@ export default {
         .get("http://localhost:8000/api/products")
         .then((response) => {
           products.value = response.data.data;
+          console.log(response.data.data)
         })
         .catch((error) => {
           console.log(error.response.data);
@@ -168,10 +175,24 @@ export default {
       }
     }
 
+    if(isShow.value){
+      toast.success(message.value, {
+        autoClose: 3000,
+      })
+    }
+
     return {
       products,
       destroy,
     };
   },
+  methods: {
+    openConfirm(){
+      this.displayConfirmation = true;
+    },
+    closeConfirmation(){
+      this.displayConfirmation = false;
+    }
+  }
 };
 </script>

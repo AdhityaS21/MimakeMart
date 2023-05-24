@@ -70,3 +70,11 @@
 .modal-fade-leave-active {
   transition: opacity 0.5s ease;
 }
+
+.confirmation-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@import "~light-icons/dist/light-icon.css";

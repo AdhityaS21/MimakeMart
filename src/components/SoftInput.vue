@@ -12,7 +12,7 @@
         :name="name"
         :value="modelValue"
         :placeholder="placeholder"
-        :isRequired="isRequired"
+        :required="isRequired"
         @input="updateValue"
       />
       <span v-if="iconDir === 'right'" class="input-group-text">

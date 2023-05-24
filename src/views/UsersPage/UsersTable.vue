@@ -82,10 +82,20 @@
                       <a
                         class="link ml-4"
                         href="javascript:;"
-                        @click.prevent="destroy(data.id)"
+                        @click.prevent="openConfirm"
                       >
                         <i class="fa fa-trash" aria-hidden="true"></i>
                       </a>
+                      <lv-dialog header="Confirmation" v-model="displayConfirmation" :style="{ width: '350px' }" :modal="true">
+                        <div class="confirmation-content">
+                          <i class="light-icon-alert-triangle p-mr-3" style="font-size: 2rem;" />
+                          <span>Are you sure want to proceed?</span>
+                        </div>
+                        <template #footer>
+                          <lv-button label="No" icon="light-icon-x" @click="closeConfirmation" class="--text-button" />
+                          <lv-button label="Yes" icon="light-icon-check" @click="closeConfirmation" class="--text-button" autofocus />
+                        </template>
+                      </lv-dialog>
                     </div>
                   </td>
                 </tr>
@@ -103,9 +113,19 @@
   // import SoftBadge from "@/components/SoftBadge.vue";
   import SoftButton from "@/components/SoftButton.vue";
   // import SoftPaginationItem from "../../components/SoftPaginationItem.vue";
+  import useToast from "../../composable/useToast";
+  import { toast } from "vue3-toastify";
+  import LvDialog from "lightvue/dialog";
+  import LvButton from "lightvue/button";
   
   export default {
+    data(){
+      return {
+        displayConfirmation: false
+      }
+    },
     setup() {
+      const { isShow, message } = useToast();
       let users = ref([]);
       let nomer = 1;
   
@@ -132,6 +152,12 @@
             });
         }
       }
+
+      if (isShow.value){
+        toast.success(message.value, {
+          autoClose: 3000,
+        });
+      }
   
       return {
         users,
@@ -139,11 +165,23 @@
         destroy,
       };
     },
+
+    methods: {
+      openConfirm(){
+        this.displayConfirmation = true;
+      },
+
+      closeConfirmation(){
+        this.displayConfirmation = false;
+      }
+    },
   
     components: {
       // SoftBadge,
       SoftButton,
       // SoftPaginationItem,
+      LvDialog,
+      LvButton,
     },
   };
   </script>

@@ -20,8 +20,11 @@ import router from "./router";
 import "./assets/css/nucleo-icons.css";
 import "./assets/css/nucleo-svg.css";
 import SoftUIDashboard from "./soft-ui-dashboard";
+import mitt from 'mitt';
 
 const appInstance = createApp(App);
+const emitter = mitt();
+appInstance.config.globalProperties.emitter = emitter;
 appInstance.use(store);
 appInstance.use(router);
 appInstance.use(SoftUIDashboard);

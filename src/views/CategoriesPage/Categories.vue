@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import CategoriesTable from "./components/CategoriesTable.vue";
+import CategoriesTable from "./CategoriesTable.vue";
 
 export default {
   components: {

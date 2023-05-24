@@ -1,20 +1,20 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Dashboard from "@/views/Dashboard.vue";
 import Tables from "@/views/Tables.vue";
-import Billing from "@/views/Billing.vue";
 import VirtualReality from "@/views/VirtualReality.vue";
 import Profile from "@/views/Profile.vue";
 import Rtl from "@/views/Rtl.vue";
 import SignIn from "@/views/SignIn.vue";
 import SignUp from "@/views/SignUp.vue";
-import Products from "@/views/Products.vue";
-import AddProduct from "@/views/AddProduct.vue";
-import Categories from "@/views/Categories.vue";
-import AddCategory from "@/views/AddCategory.vue";
+import Products from "@/views/ProductsPage/Products.vue";
+import AddProduct from "@/views/ProductsPage/AddProduct.vue";
+import Categories from "@/views/CategoriesPage/Categories.vue";
+import AddCategory from "@/views/CategoriesPage/AddCategory.vue";
 import Users from "@/views/UsersPage/Users.vue";
 import Roles from "@/views/RolesPage/Roles.vue";
 import AddRole from "@/views/RolesPage/AddRole.vue";
 import AddUser from "@/views/UsersPage/AddUser.vue";
+import Order from "@/views/OrderPage/Orders.vue";
 
 const routes = [
   {
@@ -33,9 +33,9 @@ const routes = [
     component: Tables,
   },
   {
-    path: "/billing",
-    name: "Billing",
-    component: Billing,
+    path: "/order",
+    name: "Order",
+    component: Order,
   },
   {
     path: "/virtual-reality",
@@ -117,6 +117,7 @@ const routes = [
     path: "/roles",
     name: "Roles",
     component: Roles,
+    props: true,
     children: [
       {
         path: "add-roles",

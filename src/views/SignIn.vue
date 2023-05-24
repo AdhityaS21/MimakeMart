@@ -116,7 +116,6 @@
 </template>
 
 <script>
-import { ref } from "vue";
 import Navbar from "@/examples/PageLayout/Navbar.vue";
 import SoftInput from "@/components/SoftInput.vue";
 import SoftSwitch from "@/components/SoftSwitch.vue";
@@ -145,7 +144,7 @@ export default {
       loggedIn: localStorage.getItem("loggedIn"),
       token: localStorage.getItem("token"),
       validation: [],
-      isLoading: ref(false),
+      isLoading: false,
     };
   },
   created() {
@@ -165,21 +164,20 @@ export default {
         this.isLoading = true;
         axios
           .get("http://localhost:8000/sanctum/csrf-cookie")
-          .then((response) => {
-            console.log(response),
+          .then(() => {
               axios
                 .post("http://localhost:8000/api/login", {
                   email: this.user.email,
                   password: this.user.password,
                 })
                 .then((res) => {
-                  console.log(res);
                   if (res.data.success) {
                     localStorage.setItem("loggedIn", true),
                       localStorage.setItem("token", res.data.token),
                       (this.loggedIn = true);
 
                     this.isLoading = false;
+                    this.$store.state.user = res.data.user.name;
                     return this.$router.push({ name: "Dashboard" });
                   }
                 })

@@ -5,9 +5,9 @@
         <a
           class="nav-link mb-0 px-0 py-1 active active"
           data-bs-toggle="tab"
-          href="../../../examples/pages/account/settings.html"
           role="tab"
           aria-selected="true"
+          @click="getAllMenu"
           >All</a
         >
       </li>
@@ -15,7 +15,7 @@
         <a
           class="nav-link mb-0 px-0 py-1"
           data-bs-toggle="tab"
-          href="../../../examples/pages/account/billing.html"
+          @click="getFoodMenu"
           role="tab"
           aria-selected="false"
           >Foods</a
@@ -25,7 +25,7 @@
         <a
           class="nav-link mb-0 px-0 py-1"
           data-bs-toggle="tab"
-          href="../../../examples/pages/account/invoice.html"
+          @click="getDrinkMenu"
           role="tab"
           aria-selected="false"
           >Drinks</a
@@ -35,7 +35,7 @@
         <a
           class="nav-link mb-0 px-0 py-1"
           data-bs-toggle="tab"
-          href="../../../examples/pages/account/security.html"
+          @click="getSnackMenu"
           role="tab"
           aria-selected="false"
           >Snacks</a
@@ -45,7 +45,7 @@
         <a
           class="nav-link mb-0 px-0 py-1"
           data-bs-toggle="tab"
-          href="../../../examples/pages/account/others.html"
+          @click="getOtherMenu"
           role="tab"
           aria-selected="false"
           >Others</a
@@ -57,11 +57,36 @@
 
 <script>
 import setNavPills from "@/assets/js/nav-pills.js";
+import { onMounted } from "vue";
 
 export default {
   name: "nav-pill",
   mounted() {
     setNavPills();
   },
+
+  setup() {
+    onMounted(() => {
+      console.log("This is all menu")
+    });
+  },
+
+  methods: {
+    getAllMenu(){
+      console.log("This is all menu")
+    },
+    getFoodMenu(){
+      console.log("This is all food")
+    },
+    getDrinkMenu(){
+      console.log("This is all drink")
+    },
+    getSnackMenu(){
+      console.log("This is all snack")
+    },
+    getOtherMenu(){
+      console.log("This is all other")
+    }
+  }
 };
 </script>

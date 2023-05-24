@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import ProductsTable from "./components/ProductsTable";
+import ProductsTable from "./ProductsTable";
 
 export default {
   components: {

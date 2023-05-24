@@ -172,6 +172,24 @@
                     >
               </div>
               <div class="mb-3">
+                <select
+                    v-model="role.role_id"
+                    class="form-control mb-0 bg-outline-success col-12"
+                    name="role_id"
+                  >
+                    <option disabled value="0" selected>
+                      Please Select Role
+                    </option>
+                    <option
+                      v-for="data in roles"
+                      :key="data.id"
+                      :value="data.id"
+                    >
+                      {{ data.role }}
+                    </option>
+                  </select>
+              </div>
+              <div class="mb-3">
                 <soft-input
                   id="password"
                   type="password"
@@ -235,6 +253,7 @@ import SoftCheckbox from "@/components/SoftCheckbox.vue";
 import SoftButton from "@/components/SoftButton.vue";
 import SoftAlert from "../components/SoftAlert.vue";
 import axios from "axios";
+import { reactive } from "vue";
 
 import { mapMutations } from "vuex";
 
@@ -252,11 +271,22 @@ export default {
     return {
       user: [],
       validation: [],
+      roles: [],
     };
+  },
+  setup() {
+    const role = reactive({
+      role_id: "",
+    });
+
+    return {
+      role,
+    }
   },
   created() {
     this.toggleEveryDisplay();
     this.toggleHideConfig();
+    this.getRole();
   },
   beforeUnmount() {
     this.toggleEveryDisplay();
@@ -295,7 +325,13 @@ export default {
       if (!this.user.password) {
         this.validation.password = true;
       }
-    }
+    },
+
+    getRole() {
+      axios.get("http://localhost:8000/api/roles").then((response) => {
+        this.roles = response.data.data;
+      });
+    },
   },
 };
 </script>

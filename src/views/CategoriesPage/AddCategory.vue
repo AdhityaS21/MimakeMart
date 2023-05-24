@@ -52,9 +52,10 @@
 import { reactive, onMounted } from "vue";
 import axios from "axios";
 import { useRouter, useRoute } from "vue-router";
-import SoftInput from "../components/SoftInput.vue";
-import SoftButton from "../components/SoftButton.vue";
-import SoftAlert from "../components/SoftAlert.vue";
+import SoftInput from "../../components/SoftInput.vue";
+import SoftButton from "../../components/SoftButton.vue";
+import SoftAlert from "../../components/SoftAlert.vue";
+import useToast from "../../composable/useToast";
 
 export default {
   components: {
@@ -64,6 +65,7 @@ export default {
   },
 
   setup() {
+    const { toggleToast } = useToast();
     const route = useRoute();
     const router = useRouter();
     const category = reactive({
@@ -95,6 +97,7 @@ export default {
             .post("http://localhost:8000/api/categories", { category: name })
             .then((response) => {
               if (response.data.success) {
+                toggleToast(true, response.data.message);
                 return router.push({ name: "Categories" });
               } else {
                 return;
@@ -107,6 +110,7 @@ export default {
             })
             .then((response) => {
               if (response.data.success) {
+                toggleToast(true, response.data.message);
                 return router.push({ name: "Categories" });
               } else {
                 return;

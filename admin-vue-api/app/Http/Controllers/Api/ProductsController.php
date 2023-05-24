@@ -15,7 +15,7 @@ class ProductsController extends Controller
         $response = [
             'success' => true,
             'products' => $products,
-            'data' => $products
+            'data' => $products->toArray(),
         ];
 
         return response($response, 200);
@@ -23,7 +23,12 @@ class ProductsController extends Controller
 
     public function store(Request $request)
     {
+        $imageName = time() . '.' . $request->product_image->extension();
+        $request->product_image->storeAs('public/images', $imageName);
+        $location = url("storage/images/" . $imageName);
+
         $products = Products::create([
+            'Product_image' => $location,
             'Product_Name'  => $request->product_name,
             'Pricesell'     => $request->pricesell,
             'Qty'           => $request->qty,

@@ -24,19 +24,30 @@
                       placeholder="Role Name"
                       name="role_name"
                       v-model="role.role_name"
+                      isRequired
                     />
                     <soft-alert color="danger" v-if="role.validation"
                       >Role Name Field Cannot Empty</soft-alert
                     >
                   </div>
                   <div class="mt-4" v-if="role.id == 0">
-                    <soft-button variant="gradient" color="success" full-width
-                      >Add Role</soft-button
+                    <soft-button variant="gradient" color="success" full-width :disabled="isLoading"
+                      >
+                      <div v-if="!isLoading">Add Role</div>
+                      <div v-else>
+                          <progress-spinner size="20px" strokeWidth="3" />
+                      </div>
+                    </soft-button
                     >
                   </div>
                   <div class="mt-4" v-if="role.id > 0">
-                    <soft-button variant="gradient" color="success" full-width
-                      >Update Role</soft-button
+                    <soft-button variant="gradient" color="success" full-width :disabled="isLoading"
+                      >
+                      <div v-if="!isLoading">Update Role</div>
+                      <div v-else>
+                          <progress-spinner size="20px" strokeWidth="3" />
+                      </div>
+                    </soft-button
                     >
                   </div>
                 </form>
@@ -55,14 +66,19 @@
   import SoftAlert from "../../components/SoftAlert.vue";
   import axios from "axios";
   import { useRouter, useRoute } from "vue-router";
+  import ProgressSpinner from "lightvue/progress-spinner";
+  import useToast from "../../composable/useToast";
+  
   
   export default {
     components: {
       SoftInput,
       SoftButton,
-      SoftAlert
+      SoftAlert,
+      ProgressSpinner,
     },
     setup(){
+      const { toggleToast } = useToast();
       const route = useRoute();
       const router = useRouter();
       const role = reactive({
@@ -70,6 +86,7 @@
         role_name: "",
         validation: false,
       });
+      let isLoading = false;
   
       if (route.params.id) {
         onMounted(() => {
@@ -78,9 +95,6 @@
             .then((response) => {
               role.id = response.data.data.id;
               role.role_name = response.data.data.role;
-            })
-            .catch((error) => {
-              console.log(error.response.data);
             });
         });
       }
@@ -89,6 +103,7 @@
         let name = role.role_name;
   
         if (name != "") {
+          isLoading = !isLoading;
           if (!route.params.id) {
             axios
               .post("http://localhost:8000/api/roles", {
@@ -96,8 +111,11 @@
               })
               .then((response) => {
                 if (response.data.success) {
+                  isLoading = !isLoading;
+                  toggleToast(true, response.data.message);
                   return router.push({ name: "Roles" });
                 } else {
+                  isLoading = !isLoading;
                   return;
                 }
               });
@@ -108,22 +126,24 @@
               })
               .then((response) => {
                 if (response.data.success) {
+                  isLoading = !isLoading;
+                  toggleToast(true, response.data.message);
                   return router.push({ name: "Roles" });
                 } else {
+                  isLoading = !isLoading;
                   return;
                 }
               });
           }
-        } else {
-          role.validation = true;
         }
       }
   
       return {
         role,
         store,
+        isLoading,
+        toggleToast,
       };
     },
   };
   </script>
-  

@@ -47,7 +47,7 @@
               aria-expanded="false"
               @click="showProfile = !showProfile"
             >
-              <i class="cursor-pointer fa fa-user"> {{ user.name }}</i>
+              <i class="cursor-pointer fa fa-user"> {{ user }}</i>
             </a>
             <ul
               class="px-2 py-3 dropdown-menu dropdown-menu-end me-sm-n4"
@@ -262,22 +262,23 @@ export default {
     return {
       showMenu: false,
       showProfile: false,
-      user: [],
+      user: "",
       token: localStorage.getItem("token"),
     };
   },
   props: ["minNav", "textWhite"],
   created() {
-    if (this.token) {
-      this.minNav;
-      axios
-        .get("http://localhost:8000/api/user", {
-          headers: { Authorization: "Bearer " + this.token },
-        })
-        .then((response) => {
-          this.user = response.data;
-        });
-    }
+    this.user = this.$store.state.user;
+    // if (this.token) {
+    //   this.minNav;
+    //   axios
+    //     .get("http://localhost:8000/api/user", {
+    //       headers: { Authorization: "Bearer " + this.token },
+    //     })
+    //     .then((response) => {
+    //       this.user = response.data;
+    //     });
+    // }
   },
   methods: {
     ...mapMutations(["navbarMinimize", "toggleConfigurator"]),
